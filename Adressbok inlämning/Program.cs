@@ -73,6 +73,21 @@ namespace Adressbok_inlämning
 
                     Console.WriteLine("Alla poster inskrivna");
                 }
+                else if (command == "ta bort")
+                {
+                    Console.WriteLine("Skriv in index av personen du vill ta bort");
+                    string index = Console.ReadLine();
+                    try
+                    {
+                            people.RemoveAt(Int32.Parse(index));
+                            lines.RemoveAt(Int32.Parse(index));
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Fel index");
+                    }
+
+                }
             } while (command != "sluta");
         }
     }

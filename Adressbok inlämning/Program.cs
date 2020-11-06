@@ -12,10 +12,14 @@ namespace Adressbok_inlämning
         static void Main(string[] args)
         {
             string filePath = @"C:\Users\Anthony\Adressfil.txt";
-
+            string command;
             List<Person> people = new List<Person>();
 
             List<string> lines = File.ReadAllLines(filePath).ToList();
+            Console.WriteLine("Välkommen till adressboken." +
+                "\n Skriv visa om du vill se dess innehåll." +
+                "\n Skriv ny om du vill lägga till någons Namn,Adress,Telefonnummer och Email." +
+                "\n Skriv ta bort om du vill ta bort en persons uppgifter ");
 
             try
             {
@@ -37,31 +41,39 @@ namespace Adressbok_inlämning
             }
             catch { }
 
-            Console.WriteLine("Läst från fil");
-            foreach (var person in people)
+            do
             {
-                Console.WriteLine($"{person.Name}\n" +
-                                  $"{person.Adress}\n" +
-                                  $"{person.Phone}\n" +
-                                  $"{person.Email} ");
-            }
+                Console.Write("> ");
+                command = Console.ReadLine();
+                if (command == "visa")
+                {
+                    Console.WriteLine("Läst från fil");
+                    foreach (var person in people)
+                    {
+                        Console.WriteLine($"{person.Name}\n" +
+                                          $"{person.Adress}\n" +
+                                          $"{person.Phone}\n" +
+                                          $"{person.Email} ");
+                    }
+                }
+                else if (command == "ny")
+                {
+                    people.Add(new Person { Name = Console.ReadLine(), Adress = Console.ReadLine(), Phone = Console.ReadLine(), Email = Console.ReadLine() });
 
-            people.Add(new Person { Name = Console.ReadLine(), Adress = Console.ReadLine(), Phone = Console.ReadLine(), Email = Console.ReadLine() });
+                    List<string> output = new List<string>();
 
-            List<string> output = new List<string>();
+                    foreach (var person in people)
+                    {
+                        output.Add($"{ person.Name }, { person.Adress }, { person.Phone },{ person.Email } ");
+                    }
 
-            foreach (var person in people)
-            {
-                output.Add($"{ person.Name }, { person.Adress }, { person.Phone },{ person.Email } ");
-            }
+                    Console.WriteLine("Skriver till fil");
 
-            Console.WriteLine("Skriver till fil");
+                    File.WriteAllLines(filePath, output);
 
-            File.WriteAllLines(filePath, output);
-
-            Console.WriteLine("Alla poster inskrivna");
-
-            Console.ReadKey();
+                    Console.WriteLine("Alla poster inskrivna");
+                }
+            } while (command != "sluta");
         }
     }
 

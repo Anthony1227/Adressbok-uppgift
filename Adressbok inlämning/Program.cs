@@ -19,7 +19,8 @@ namespace Adressbok_inlämning
             Console.WriteLine("Välkommen till adressboken." +
                 "\n Skriv visa om du vill se dess innehåll." +
                 "\n Skriv ny om du vill lägga till någons Namn,Adress,Telefonnummer och Email." +
-                "\n Skriv ta bort om du vill ta bort en persons uppgifter ");
+                "\n Skriv ta bort om du vill ta bort en persons uppgifter " +
+                "\n efter du tagit bort en person skriv in kommandot: spara");
 
             try
             {
@@ -53,7 +54,7 @@ namespace Adressbok_inlämning
                         Console.WriteLine($"{person.Name}\n" +
                                           $"{person.Adress}\n" +
                                           $"{person.Phone}\n" +
-                                          $"{person.Email} ");
+                                          $" {person.Email} ");
                     }
                 }
                 else if (command == "ny")
@@ -75,18 +76,37 @@ namespace Adressbok_inlämning
                 }
                 else if (command == "ta bort")
                 {
-                    Console.WriteLine("Skriv in index av personen du vill ta bort");
-                    string index = Console.ReadLine();
-                    try
+                    Console.Write("Ange namnet på den du vill ta bort ur adressboken: ");
+                    string name = Console.ReadLine();
+                    bool removedName = false;
+                    for (int i = 0; i < people.Count; i++)
                     {
-                            people.RemoveAt(Int32.Parse(index));
-                            lines.RemoveAt(Int32.Parse(index));
+                        if (name == people[i].Name)
+                        {
+                            Console.WriteLine($"Tog bort personen med namnet {name} ur adressbooken!");
+                            Console.WriteLine($"Hittade {name} på rad {i + 1}");
+                            Console.WriteLine($"Skriv in kommandot 'spara' för att skicka din ändring till text filen");
+                            people.RemoveAt(i);
+                            removedName = true;
+                        }
                     }
-                    catch
+                    if (removedName == false)
                     {
-                        Console.WriteLine("Fel index");
+                        Console.WriteLine($"Hittade ingen med namnet {name} i adressboken, har du stavat rätt?");
                     }
-
+                }
+                else if (command == "spara")
+                {
+                    using (StreamWriter writer = new StreamWriter(filePath))
+                    {
+                        for (int i = 0; i < people.Count(); i++)
+                        {
+                            writer.WriteLine("{0},{1},{2},{3}",
+                                            people[i].Name, people[i].Adress,
+                                            people[i].Phone, people[i].Email);
+                        }
+                        Console.WriteLine("Adressboken är sparad!");
+                    }
                 }
             } while (command != "sluta");
         }
